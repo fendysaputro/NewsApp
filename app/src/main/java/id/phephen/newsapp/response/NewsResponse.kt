@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName
  * Created by phephen on 08,February,2021
  * https://github.com/fendysaputro
  */
+
 data class NewsResponse(
     @SerializedName("status") val status: String,
     @SerializedName("totalResults") val totalResults: Int,
