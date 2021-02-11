@@ -28,7 +28,12 @@ class DataRepository (context: Context) {
             }
     }
 
-    suspend fun getSources(): Flow<SourcesResponse> {
-        return dataSource.getSources()
+    suspend fun getSources(query: String?): Flow<SourcesResponse> {
+        return query?.nonEmptyStringOrNull()?.let { q ->
+            dataSource.getSources(q)
+        } ?: dataSource.getCountryCode()
+            .flatMapMerge { countryCode ->
+                dataSource.getSources(countryCode)
+            }
     }
 }

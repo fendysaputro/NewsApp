@@ -31,6 +31,7 @@ interface ApiService {
 
     @GET("/v2/sources")
     suspend fun getSources(
-        @Query("apiKey") apiKey: String
+        @Query("apiKey") apiKey: String,
+        @Query("q") query: String
     ): Response<SourcesResponse>
 }

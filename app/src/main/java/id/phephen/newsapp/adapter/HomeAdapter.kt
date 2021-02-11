@@ -15,14 +15,15 @@ import id.phephen.newsapp.ui.MainActivity
  * Created by phephen on 10,February,2021
  * https://github.com/fendysaputro
  */
-class HomeAdapter (private var sources: List<Sources>) : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
+class HomeAdapter (private var sources: List<Sources>, private val listener: (Sources) -> Unit) : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeAdapter.HomeViewHolder {
         val binding = ItemSourceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return HomeViewHolder(binding)
+        return HomeViewHolder(binding, listener)
     }
 
     override fun onBindViewHolder(holder: HomeAdapter.HomeViewHolder, position: Int) {
-        holder.bind(sources[position])
+        holder.bind(sources[position], listener)
     }
 
     override fun getItemCount() = sources.size
@@ -32,13 +33,13 @@ class HomeAdapter (private var sources: List<Sources>) : RecyclerView.Adapter<Ho
         notifyDataSetChanged()
     }
 
-    class HomeViewHolder(private val binding: ItemSourceBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Sources) {
+    inner class HomeViewHolder(private val binding: ItemSourceBinding, listener: (Sources) -> Unit) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Sources, listener: (Sources) -> Unit) {
             binding.tvSource.text = item.name
             binding.tvDesc.text = item.desc
 
             itemView.setOnClickListener {
-
+                listener(item)
             }
         }
     }

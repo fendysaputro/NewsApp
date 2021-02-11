@@ -41,11 +41,11 @@ class DataViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun fetchSourcesData() {
+    fun fetchSourcesData(query: String? = null) {
         apiJob?.cancel()
         apiJob = viewModelScope.launch {
             sourcesLiveData.loading()
-            repo.getSources()
+            repo.getSources(query)
                 .catch { error ->
                     sourcesLiveData.failure(error)
                 }

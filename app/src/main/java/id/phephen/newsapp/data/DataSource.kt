@@ -57,9 +57,9 @@ class DataSource(context: Context) {
         }
     }
 
-    suspend fun getSources(): Flow<SourcesResponse> {
+    suspend fun getSources(query: String): Flow<SourcesResponse> {
         return flow {
-            val response = RetrofitClient.api.getSources(API_KEY)
+            val response = RetrofitClient.api.getSources(API_KEY, query)
 
             checkStatus(response, this)
         }

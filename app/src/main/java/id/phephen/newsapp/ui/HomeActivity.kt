@@ -76,7 +76,10 @@ class HomeActivity : AppCompatActivity() {
     private fun onGetDataSuccess(data: SourcesResponse?) {
         if (data?.sources?.isNotEmpty() == true) {
             if (adapter == null) {
-                adapter = HomeAdapter(data.sources)
+                adapter = HomeAdapter(data.sources) {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
                 rvSource.adapter = adapter
                 if (rvSource.itemDecorationCount == 0) {
                     rvSource.addItemDecoration(
