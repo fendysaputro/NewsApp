@@ -4,6 +4,7 @@ import android.content.Context
 import id.phephen.newsapp.data.DataSource
 import id.phephen.newsapp.helper.nonEmptyStringOrNull
 import id.phephen.newsapp.response.NewsResponse
+import id.phephen.newsapp.response.SourcesResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapMerge
 
@@ -25,5 +26,9 @@ class DataRepository (context: Context) {
             .flatMapMerge { countryCode ->
                 dataSource.getTopHeadlines(countryCode)
             }
+    }
+
+    suspend fun getSources(): Flow<SourcesResponse> {
+        return dataSource.getSources()
     }
 }

@@ -2,6 +2,7 @@ package id.phephen.newsapp.api
 
 import id.phephen.newsapp.response.CountryCheckResponse
 import id.phephen.newsapp.response.NewsResponse
+import id.phephen.newsapp.response.SourcesResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -27,4 +28,9 @@ interface ApiService {
         @Query("apiKey") apiKey: String,
         @Query("q") query: String
     ): Response<NewsResponse>
+
+    @GET("/v2/sources")
+    suspend fun getSources(
+        @Query("apiKey") apiKey: String
+    ): Response<SourcesResponse>
 }

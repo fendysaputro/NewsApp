@@ -11,6 +11,7 @@ import id.phephen.newsapp.helper.loading
 import id.phephen.newsapp.helper.success
 import id.phephen.newsapp.repository.DataRepository
 import id.phephen.newsapp.response.NewsResponse
+import id.phephen.newsapp.response.SourcesResponse
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -24,6 +25,7 @@ class DataViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repo = DataRepository(application)
     val newsLiveData = MutableLiveData<ResultWrapper<NewsResponse, Throwable>>()
+    val sourcesLiveData = MutableLiveData<ResultWrapper<SourcesResponse, Throwable>>()
 
     private var apiJob: Job? = null
 
@@ -36,6 +38,18 @@ class DataViewModel(application: Application) : AndroidViewModel(application) {
                     newsLiveData.failure(error)
                 }
                 .collect { newsLiveData.success(it) }
+        }
+    }
+
+    fun fetchSourcesData() {
+        apiJob?.cancel()
+        apiJob = viewModelScope.launch {
+            sourcesLiveData.loading()
+            repo.getSources()
+                .catch { error ->
+                    sourcesLiveData.failure(error)
+                }
+                .collect { sourcesLiveData.success(it) }
         }
     }
 }

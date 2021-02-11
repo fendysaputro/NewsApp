@@ -6,6 +6,7 @@ import id.phephen.newsapp.helper.Constant
 import id.phephen.newsapp.helper.NetworkException
 import id.phephen.newsapp.helper.nonEmptyStringOrNull
 import id.phephen.newsapp.response.NewsResponse
+import id.phephen.newsapp.response.SourcesResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
@@ -51,6 +52,14 @@ class DataSource(context: Context) {
                     API_KEY,
                     query
             )
+
+            checkStatus(response, this)
+        }
+    }
+
+    suspend fun getSources(): Flow<SourcesResponse> {
+        return flow {
+            val response = RetrofitClient.api.getSources(API_KEY)
 
             checkStatus(response, this)
         }

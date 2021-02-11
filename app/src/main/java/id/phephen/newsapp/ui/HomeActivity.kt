@@ -15,6 +15,8 @@ import id.phephen.newsapp.helper.ResultWrapper
 import id.phephen.newsapp.helper.isVisible
 import id.phephen.newsapp.helper.nonEmptyStringOrNull
 import id.phephen.newsapp.response.NewsResponse
+import id.phephen.newsapp.response.Sources
+import id.phephen.newsapp.response.SourcesResponse
 import id.phephen.newsapp.viewmodel.DataViewModel
 
 class HomeActivity : AppCompatActivity() {
@@ -32,6 +34,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         initView()
         initialize()
+        getDataSource()
     }
 
     private fun initView() {
@@ -44,7 +47,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun getDataSource() {
-        viewModel.newsLiveData.observe(this, Observer { result ->
+        viewModel.sourcesLiveData.observe(this, Observer { result ->
             isLoading(result.isLoading)
 
             when (result.state) {
@@ -58,7 +61,7 @@ class HomeActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.fetchNewsData()
+        viewModel.fetchSourcesData()
     }
 
     private fun isLoading(isLoading: Boolean) {
@@ -70,13 +73,10 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun onGetDataSuccess(data: NewsResponse?) {
-        if (data?.articles?.isNotEmpty() == true) {
+    private fun onGetDataSuccess(data: SourcesResponse?) {
+        if (data?.sources?.isNotEmpty() == true) {
             if (adapter == null) {
-                adapter = HomeAdapter(data.articles) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                }
+                adapter = HomeAdapter(data.sources)
                 rvSource.adapter = adapter
                 if (rvSource.itemDecorationCount == 0) {
                     rvSource.addItemDecoration(
@@ -86,10 +86,9 @@ class HomeActivity : AppCompatActivity() {
                         )
                     )
                 }
+            } else {
+                adapter?.updateData(data.sources)
             }
-//            } else {
-//                adapter?.updateData(data.articles)
-//            }
         } else {
             tvInfo.isVisible = true
             tvInfo.text = "No Search Results found for"
