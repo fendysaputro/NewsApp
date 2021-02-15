@@ -78,6 +78,7 @@ class HomeActivity : AppCompatActivity() {
             if (adapter == null) {
                 adapter = HomeAdapter(data.sources) {
                     val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("source_id", it.id)
                     startActivity(intent)
                 }
                 rvSource.adapter = adapter

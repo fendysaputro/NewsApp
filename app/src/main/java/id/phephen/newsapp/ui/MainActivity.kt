@@ -31,13 +31,25 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DataViewModel
     private var adapter: NewsAdapter? = null
 
+    private var sourceId: String? = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
+        getIntentData()
         initialize()
         getDataNews()
+    }
+
+    private fun getIntentData() {
+        if (intent.hasExtra("source_id")) {
+            val newSourceId = intent.getStringExtra("source_id")
+            newSourceId?.let {
+                sourceId = it
+            }
+        }
     }
 
     private fun initView() {
@@ -65,7 +77,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.fetchNewsData()
+        viewModel.fetchNewsData(sourceId)
     }
 
     private fun isLoading(isLoading: Boolean) {
